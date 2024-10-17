@@ -67,7 +67,7 @@ function draw() {
   timer += deltaTime;
 
   // Every 1000 milliseconds (1 second), update the countdown
-  if (timer >= 1000) {
+  if (timer >= 900) {
     timer = 0; // Reset the timer
     countdown--; // Decrement the countdown
 
@@ -104,7 +104,7 @@ function showVisualiser() {
         }else{
             console.log('not found');
         }
-    }, 1)
+    }, 12000)
 
 
   }
@@ -248,7 +248,7 @@ class Visualiser {
     }
     pop();
 
-    this.gen += 0.00034 // Increment for noticeable animation
+    this.gen += 0.000365 // Increment for noticeable animation
   }
   applyGlowEffect() {
     // Rotate and draw glowing circles
