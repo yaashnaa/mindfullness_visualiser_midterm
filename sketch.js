@@ -162,40 +162,23 @@ function checkFacialPoints() {
         // return; // Skip frame when a blink is detected
       }
   
-    // Logic for detecting nose scrunch
-    if (noseScrunchDist < 40) {
-      //   console.log("Nose scrunched");
-      visualiser.setColor(255, 150, 150); // Set specific colors for nose scrunch
-    }
-
-    // Logic for detecting mouth movement sideways (significant changes in mouth width)
-    else if (mouthHorizontalDist < 40) {
-        console.log("Mouth moved sideways");
-      visualiser.setColor(204, 102, 102); // Set specific colors for sideways mouth movement
-    }
-
-    // Logic for detecting mouth moving up or down (significant change in mouth vertical distance)
-    else if (mouthVerticalDist > 3) {
-      //   console.log("Mouth moved up or down");
-      visualiser.setColor(204, 102, 102); // Set specific colors for vertical mouth movement
-    }
-
-    // Eye to eyebrow logic (frowning/raised eyebrows)
-    else if (eyeToEyebrowDist < 15 && eyeToEyebrowDist > 10) {
-      visualiser.setColor(204, 102, 102); // Set jagged colors for frowning
-    } else if (eyeToEyebrowDist > 30) {
-      visualiser.setColor(204, 102, 102); // Set jagged colors for raised eyebrows
-    }
-
-    // Mouth open detection
-    else if (mouthOpenDist > 10) {
-      visualiser.setColor(204, 102, 102); // Set jagged colors for mouth open
-    }
-
-    // Neutral state
-    else {
-      visualiser.setColor(204, 232, 204); // Set neutral/smooth colors
-    }
+     // Facial expression handling
+     if (eyeToEyebrowDist < 20 && eyeToEyebrowDist > 10) {
+        console.log("frowning");
+        visualiser.setColor(204, 102, 102); // Set jagged colors
+      } else if (eyeToEyebrowDist > 35) {
+        console.log("raised eyebrows - stressed/surprised");
+        visualiser.setColor(204, 102, 102); // Set jagged colors
+      } else if (mouthOpenDist < 10) {
+        console.log("smooth - relaxed");
+        visualiser.setColor(204, 232, 204); // Set smooth colors
+      } else if (mouthOpenDist > 15) {
+        console.log("mouth open - jagged");
+        visualiser.setColor(204, 102, 102); // Set jagged colors
+      } else {
+        console.log("neutral");
+        visualiser.setColor(204, 232, 204); // Set neutral/smooth colors
+      }
   }
 }
 function drawTextWithEffects(textContent, x, y, opacity, size) {
