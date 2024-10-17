@@ -24,14 +24,14 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont("Satisfy");
 
-    visualiserContainer = document.getElementById("visualiser");
+  visualiserContainer = document.getElementById("visualiser");
 
-    // Ensure element exists
-    if (visualiserContainer) {
-      console.log("Visualizer element found"); // Log for debugging
-    } else {
-      console.error("Visualizer element not found");
-    }
+  // Ensure element exists
+  if (visualiserContainer) {
+    console.log("Visualizer element found"); // Log for debugging
+  } else {
+    console.error("Visualizer element not found");
+  }
 
   // Choose RGB color mode to match your original code
   colorMode(RGB);
@@ -52,18 +52,17 @@ function setup() {
 
   // Hide the canvas initially until the "Ready?" text fades in
   visualiserContainer.style.display = "none";
-//   setTimeout(() => {
-//     visualiserContainer.style.display = "block";
-//     console.log('displayed');
-//   }, 12000);
+  //   setTimeout(() => {
+  //     visualiserContainer.style.display = "block";
+  //     console.log('displayed');
+  //   }, 12000);
 }
 
 function draw() {
   clear();
   if (visualiserContainer.style.display === "block") {
-      visualiser.display();  // Draw the visualizer
-
-    }
+    visualiser.display(); // Draw the visualizer
+  }
   timer += deltaTime;
 
   // Every 1000 milliseconds (1 second), update the countdown
@@ -84,31 +83,26 @@ function draw() {
 
   // Decrease opacity for fade effect
   opacity -= 5;
-showVisualiser()
+  showVisualiser();
   // Draw breathing state and countdown text
   drawTextWithEffects(breathingState, width / 2, height / 6, opacity, 64);
   drawTextWithEffects(countdown, width / 2, height / 4.5, opacity, 48);
 
   checkFacialPoints();
-
-
 }
 function showVisualiser() {
-    const visualiserEl = document.getElementById("visualiser");
-    setTimeout(()=>{
-        if (visualiserEl){
-            visualiserEl.style.display = "block"; // Make the div visible
-            setTimeout(() => {
-              visualiserEl.style.opacity = 1; // Fade it in after it's visible
-            }, 2); // Small delay to allow the opacity change to kick in afte
-        }else{
-            console.log('not found');
-        }
-    }, 12000)
-
-
-  }
-  
+  const visualiserEl = document.getElementById("visualiser");
+  setTimeout(() => {
+    if (visualiserEl) {
+      visualiserEl.style.display = "block"; // Make the div visible
+      setTimeout(() => {
+        visualiserEl.style.opacity = 1; // Fade it in after it's visible
+      }, 2); // Small delay to allow the opacity change to kick in afte
+    } else {
+      console.log("not found");
+    }
+  }, 12000);
+}
 
 function checkFacialPoints() {
   if (faces.length > 0) {
@@ -128,7 +122,12 @@ function checkFacialPoints() {
       leftEye.x,
       leftEye.y
     );
-    let eyeOpenDist = dist(leftEye.x, leftEye.y, lowerLeftEyelid.x, lowerLeftEyelid.y); // Eye open distance
+    let eyeOpenDist = dist(
+      leftEye.x,
+      leftEye.y,
+      lowerLeftEyelid.x,
+      lowerLeftEyelid.y
+    ); // Eye open distance
     let leftMouthCorner = face.keypoints[61]; // Left corner of the mouth
     let rightMouthCorner = face.keypoints[291]; // Right corner of the mouth
     let mouthOpenDist = dist(upperLip.x, upperLip.y, lowerLip.x, lowerLip.y);
@@ -157,28 +156,37 @@ function checkFacialPoints() {
       lowerLip.y
     );
     if (eyeOpenDist < blinkThreshold) {
-        console.log("blink detected - ignoring");
-        visualiser.setColor(204, 232, 204);
-        // return; // Skip frame when a blink is detected
-      }
-  
-     // Facial expression handling
-     if (eyeToEyebrowDist < 20 && eyeToEyebrowDist > 10) {
-        console.log("frowning");
-        visualiser.setColor(204, 102, 102); // Set jagged colors
-      } else if (eyeToEyebrowDist > 35) {
-        console.log("raised eyebrows - stressed/surprised");
-        visualiser.setColor(204, 102, 102); // Set jagged colors
-      } else if (mouthOpenDist < 10) {
-        console.log("smooth - relaxed");
-        visualiser.setColor(204, 232, 204); // Set smooth colors
-      } else if (mouthOpenDist > 15) {
-        console.log("mouth open - jagged");
-        visualiser.setColor(204, 102, 102); // Set jagged colors
-      } else {
-        console.log("neutral");
-        visualiser.setColor(204, 232, 204); // Set neutral/smooth colors
-      }
+      console.log("blink detected - ignoring");
+      visualiser.setColor(204, 232, 204);
+      // return; // Skip frame when a blink is detected
+    }
+
+    // Facial expression handling
+    if (eyeToEyebrowDist < 20 && eyeToEyebrowDist > 10) {
+      console.log("frowning");
+      visualiser.setColor(204, 102, 102); // Set jagged colors
+    } else if (noseScrunchDist < 20) {
+      //   console.log("Nose scrunched");
+      visualiser.setColor(255, 150, 150); // Set specific colors for nose scrunch
+    } else if (mouthHorizontalDist < 40) {
+      //   console.log("Mouth moved sideways");
+      visualiser.setColor(204, 102, 102); // Set specific colors for sideways mouth movement
+    } else if (eyeToEyebrowDist > 40) {
+      console.log("raised eyebrows - stressed/surprised");
+      visualiser.setColor(204, 102, 102); // Set jagged colors
+    } else if (mouthOpenDist < 10) {
+      console.log("smooth - relaxed");
+      visualiser.setColor(204, 232, 204); // Set smooth colors
+    } else if (mouthOpenDist > 15) {
+      console.log("mouth open - jagged");
+      visualiser.setColor(204, 102, 102); // Set jagged colors
+    } else if (mouthVerticalDist > 15) {
+      //   console.log("Mouth moved up or down");
+      visualiser.setColor(204, 102, 102); // Set specific colors for vertical mouth movement
+    } else {
+      console.log("neutral");
+      visualiser.setColor(204, 232, 204); // Set neutral/smooth colors
+    }
   }
 }
 function drawTextWithEffects(textContent, x, y, opacity, size) {
@@ -231,7 +239,7 @@ class Visualiser {
     }
     pop();
 
-    this.gen += 0.000365 // Increment for noticeable animation
+    this.gen += 0.000365; // Increment for noticeable animation
   }
   applyGlowEffect() {
     // Rotate and draw glowing circles
@@ -259,7 +267,6 @@ class Visualiser {
     }
   }
 }
-
 
 // Callback function when faceMesh outputs data
 function gotFaces(results) {
