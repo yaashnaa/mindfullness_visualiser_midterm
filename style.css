@@ -1,16 +1,99 @@
-html{
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: linear-gradient(to bottom, rgb(30, 30, 60), rgb(10, 10, 30));
 }
-body{
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: rgb(51,51,51);
+
+.container {
+  position: absolute;
+  font-size: 4rem;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70vw;
 }
-canvas{
-    height: 100vh;
-    width: 100vw;
+
+.message {
+  position: absolute;
+  opacity: 0;
+  animation: fadeInOut 12s forwards;
+}
+
+.message:nth-child(1) {
+  font-family: "Sofia", cursive;
+  animation-delay: 0s; /* First message */
+}
+
+.message:nth-child(2) {
+  font-family: "Sofia", cursive;
+  animation-delay: 4s; /* Second message starts after 4 seconds */
+}
+
+.message:nth-child(3) {
+  font-family: "Sofia", cursive;
+  animation-delay: 8s; /* Third message starts after 8 seconds */
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.countdown {
+  font-size: 2rem;
+  font-family: "Sofia", cursive;
+  color: white;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+#visualiser {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0; /* Start with the visualizer hidden */
+  transition: opacity 5s ease-in; /* Smooth fade-in over 2 seconds */
+
+}
+
+.breathing-directions {
+  display: none;
+}
+
+.breathing-state {
+  font-size: 2rem;
+  font-family: "Sofia", cursive;
+  color: white;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
