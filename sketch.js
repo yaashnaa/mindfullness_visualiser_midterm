@@ -13,7 +13,7 @@ let timer = 0;
 let breathingState = "Breathe in"; // Start with "Breathe in"
 let opacity = 255;
 // Threshold for detecting blink (adjust if needed)
-let blinkThreshold = 5;
+let blinkThreshold = 4;
 
 function preload() {
   // Load the faceMesh model
@@ -62,7 +62,7 @@ function draw() {
   clear();
   if (visualiserContainer.style.display === "block") {
       visualiser.display();  // Draw the visualizer
-      console.log('displayed 1');
+
     }
   timer += deltaTime;
 
@@ -100,11 +100,11 @@ function showVisualiser() {
             visualiserEl.style.display = "block"; // Make the div visible
             setTimeout(() => {
               visualiserEl.style.opacity = 1; // Fade it in after it's visible
-            }, 10); // Small delay to allow the opacity change to kick in afte
+            }, 2); // Small delay to allow the opacity change to kick in afte
         }else{
             console.log('not found');
         }
-    }, 12000)
+    }, 1)
 
 
   }
@@ -115,7 +115,7 @@ function checkFacialPoints() {
     let face = faces[0];
     let leftEyebrow = face.keypoints[105];
     let leftEye = face.keypoints[159];
-
+    let lowerLeftEyelid = face.keypoints[145];
     let upperLip = face.keypoints[13]; // Top of the upper lip
     let lowerLip = face.keypoints[14]; // Bottom of the lower lip
     // Retrieve keypoints for the nose and mouth
@@ -128,6 +128,7 @@ function checkFacialPoints() {
       leftEye.x,
       leftEye.y
     );
+    let eyeOpenDist = dist(leftEye.x, leftEye.y, lowerLeftEyelid.x, lowerLeftEyelid.y); // Eye open distance
     let leftMouthCorner = face.keypoints[61]; // Left corner of the mouth
     let rightMouthCorner = face.keypoints[291]; // Right corner of the mouth
     let mouthOpenDist = dist(upperLip.x, upperLip.y, lowerLip.x, lowerLip.y);
@@ -155,21 +156,26 @@ function checkFacialPoints() {
       lowerLip.x,
       lowerLip.y
     );
-
+    if (eyeOpenDist < blinkThreshold) {
+        console.log("blink detected - ignoring");
+        visualiser.setColor(204, 232, 204);
+        // return; // Skip frame when a blink is detected
+      }
+  
     // Logic for detecting nose scrunch
-    if (noseScrunchDist < 20) {
+    if (noseScrunchDist < 40) {
       //   console.log("Nose scrunched");
       visualiser.setColor(255, 150, 150); // Set specific colors for nose scrunch
     }
 
     // Logic for detecting mouth movement sideways (significant changes in mouth width)
     else if (mouthHorizontalDist < 40) {
-      //   console.log("Mouth moved sideways");
+        console.log("Mouth moved sideways");
       visualiser.setColor(204, 102, 102); // Set specific colors for sideways mouth movement
     }
 
     // Logic for detecting mouth moving up or down (significant change in mouth vertical distance)
-    else if (mouthVerticalDist > 15) {
+    else if (mouthVerticalDist > 3) {
       //   console.log("Mouth moved up or down");
       visualiser.setColor(204, 102, 102); // Set specific colors for vertical mouth movement
     }
@@ -234,15 +240,15 @@ class Visualiser {
 
     push();
     translate(this.x, this.y);
-    rotate(this.gen * 2);
+    rotate(this.gen * 4);
     // scale(scaleFactor);
     for (var i = 0; i < 144; i++) {
-      rotate((6 / this.gen) * 44);
+      rotate((6 / this.gen) * 54);
       curve(i, i, 0, angle + i, 133, angle - i, i + 133, i);
     }
     pop();
 
-    this.gen += 0.0002; // Increment for noticeable animation
+    this.gen += 0.00034 // Increment for noticeable animation
   }
   applyGlowEffect() {
     // Rotate and draw glowing circles
