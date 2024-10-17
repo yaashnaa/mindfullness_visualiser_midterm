@@ -13,7 +13,7 @@ let timer = 0;
 let breathingState = "Breathe in"; // Start with "Breathe in"
 let opacity = 255;
 // Threshold for detecting blink (adjust if needed)
-let blinkThreshold = 4;
+let blinkThreshold = 3;
 
 function preload() {
   // Load the faceMesh model
